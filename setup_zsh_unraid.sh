@@ -95,12 +95,6 @@ rm /root/.zshrc
 
 # Create .zshrc file at /root/.zshrc
 cat << 'EOF' > /root/.zshrc
-# Fastfetch command
-FASTFETCH_DIR="/root/fastfetch"
-if [[ -o interactive ]]; then
-    $FASTFETCH_DIR/fastfetch
-fi
-
 export ZSH="/root/.oh-my-zsh"
 
 ZSH_THEME="robbyrussell"
@@ -122,6 +116,15 @@ source $ZSH/oh-my-zsh.sh
 alias l='ls -lFh'     #size,show type,human readable
 alias la='ls -lAFh'   #long list,show almost all,show type,human readable
 
+EOF
+
+# Create .zshrc file at /root/.zshrc
+cat << 'EOF' > /root/.zshenv
+# Fastfetch command
+FASTFETCH_DIR="/root/fastfetch"
+if [[ -o interactive ]]; then
+    $FASTFETCH_DIR/fastfetch --gpu-temp true --cpu-temp true
+fi
 
 EOF
 
