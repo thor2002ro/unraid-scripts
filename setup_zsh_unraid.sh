@@ -73,6 +73,20 @@ fi
 chmod 755 $OH_MY_ZSH_PLUGINS/zsh-autosuggestions
 chmod 755 $OH_MY_ZSH_PLUGINS/zsh-syntax-highlighting
 
+# Download and install Fastfetch
+echo "Downloading and installing Fastfetch..."
+FASTFETCH_DIR="$HOME/fastfetch"
+mkdir -p $FASTFETCH_DIR
+curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest \
+| grep "browser_download_url.*-linux-amd64.tar.gz" \
+| cut -d : -f 2,3 \
+| tr -d \" \
+| wget -qi - -O $FASTFETCH_DIR/fastfetch.tar.gz
+tar -xzf $FASTFETCH_DIR/fastfetch.tar.gz -C $FASTFETCH_DIR --strip-components=1
+cp $FASTFETCH_DIR/usr/bin/* $FASTFETCH_DIR/
+rm -r $FASTFETCH_DIR/usr
+chmod +x $FASTFETCH_DIR/*
+
 # Change the default shell to zsh
 chsh -s /bin/zsh
 
@@ -81,6 +95,12 @@ rm /root/.zshrc
 
 # Create .zshrc file at /root/.zshrc
 cat << 'EOF' > /root/.zshrc
+# Fastfetch command
+FASTFETCH_DIR="/root/fastfetch"
+if [[ -o interactive ]]; then
+    $FASTFETCH_DIR/fastfetch
+fi
+
 export ZSH="/root/.oh-my-zsh"
 
 ZSH_THEME="robbyrussell"
@@ -101,6 +121,8 @@ source $ZSH/oh-my-zsh.sh
 # User configurations
 alias l='ls -lFh'     #size,show type,human readable
 alias la='ls -lAFh'   #long list,show almost all,show type,human readable
+
+
 EOF
 
 # Set up directories and history file
@@ -111,6 +133,4 @@ touch /boot/config/extra/history
 # Symlink history file
 cp -sf /boot/config/extra/history /root/.cache/zsh/history
 
-echo "Oh-My-Zsh Setup complete."
-
-
+echo "Oh-My-Zsh and Fastfetch setup complete."
