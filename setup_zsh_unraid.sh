@@ -87,6 +87,8 @@ curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest \
 tar -xzf $FASTFETCH_DIR/fastfetch.tar.gz -C $FASTFETCH_DIR --strip-components=1
 cp $FASTFETCH_DIR/usr/bin/* $FASTFETCH_DIR/
 rm -r $FASTFETCH_DIR/usr
+rm $FASTFETCH_DIR/fastfetch.tar.gz
+rm $FASTFETCH_DIR/flashfetch
 chmod +x $FASTFETCH_DIR/*
 
 # Change the default shell to zsh
