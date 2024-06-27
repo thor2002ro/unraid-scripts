@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export HOME=/root
+
 # Define Slackware mirror URL and package directory
 MIRROR="https://mirrors.slackware.com/slackware/slackware64-current/slackware64/"
 PACKAGE_DIR="ap"
