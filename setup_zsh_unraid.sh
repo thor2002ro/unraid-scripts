@@ -440,6 +440,53 @@ if [[ -f "$fastfetch_extract_dir/usr/bin/flashfetch" ]]; then
   install -m 0755 "$fastfetch_extract_dir/usr/bin/flashfetch" "$FASTFETCH_DIR/flashfetch"
 fi
 
+# Generate the Fastfetch JSON configuration on every setup run
+fastfetch_config_file="$TMP_DIR/fastfetch-config.jsonc"
+cat >"$fastfetch_config_file" <<'EOF'
+{
+  "modules": [
+    "title",
+    "separator",
+    "os",
+    "host",
+    "kernel",
+    "uptime",
+    "packages",
+    "shell",
+    "display",
+    "de",
+    "wm",
+    "wmtheme",
+    "theme",
+    "icons",
+    "font",
+    "cursor",
+    "terminal",
+    "terminalfont",
+    {
+      "type": "cpu",
+      "temp": true
+    },
+    {
+      "type": "gpu",
+      "temp": true
+    },
+    "memory",
+    "swap",
+    "disk",
+    "localip",
+    "battery",
+    "poweradapter",
+    "locale",
+    "break",
+    "colors"
+  ]
+}
+EOF
+
+mkdir -p /root/.config/fastfetch
+install -m 0600 "$fastfetch_config_file" /root/.config/fastfetch/config.jsonc
+
 # Change the default root shell to Zsh
 echo "Configuring Zsh..."
 chsh -s /bin/zsh root
@@ -474,7 +521,9 @@ cat >"$zshenv_file" <<'EOF'
 # Fastfetch command
 FASTFETCH_DIR="/root/fastfetch"
 if [[ -o interactive && -x "$FASTFETCH_DIR/fastfetch" ]]; then
-  "$FASTFETCH_DIR/fastfetch" --gpu-temp true --cpu-temp true
+  # Module-specific CLI switches were removed in Fastfetch 2.52.
+  # Temperature options are defined in ~/.config/fastfetch/config.jsonc.
+  "$FASTFETCH_DIR/fastfetch"
 fi
 EOF
 
